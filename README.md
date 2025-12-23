@@ -880,4 +880,1762 @@ Result: Unprofessional, inconsistent brand presentation
 ```
 User creates 5 ads:
 ├─ All use exact brand colors (#FF6B35, #F7931E, #FDC830)
-├─ Logo appears
+├─ Logo appearsidentically positioned in all
+├─ Voice tone and style consistent throughout
+└─ Typography unified across all text elements
+Result: Professional, cohesive brand campaign
+```
+
+### 3.3 How It Works - Technical Flow
+
+**Complete User Journey (Social Media Ad Example):**
+
+#### Step 1: User Input (Web Interface)
+
+**User accesses platform and selects ad type:**
+
+```
+Landing Page
+├─ [Create New Ad]
+└─ Select Ad Type:
+    ├─ 📊 Explainer Video
+    ├─ 💬 Testimonial
+    ├─ 📱 Social Media Ad ← Selected
+    └─ ✨ VFX Advert
+```
+
+**Guided form appears with structured inputs:**
+
+```
+Social Media Ad Creator
+═══════════════════════════
+
+📋 Basic Information
+├─ Product/Service: "Bold Brew Artisan Coffee - Morning Blend"
+├─ Main Message: "Start your day bold. Limited time 20% off."
+└─ Target Audience: "Young professionals, 25-35, coffee enthusiasts"
+
+📱 Platform & Format
+├─ Platform: Instagram Reels ← Auto-sets 9:16 aspect ratio
+├─ Duration: 15 seconds (slider)
+└─ Quality: Fast ($0.40) / Quality ($2.80) ← User selects
+
+🎨 Creative Direction
+├─ Mood: [✓] Energetic [ ] Professional [ ] Fun [✓] Urgent
+├─ Visual Style: [Modern & Clean] (dropdown)
+└─ Call to Action: "Shop Now with code BOLD20"
+
+📁 Brand Assets
+├─ Logo: bold-brew-logo.png ← From brand profile
+├─ Colors: #FF6B35, #F7931E, #FDC830 ← From brand profile
+└─ Product Image: morning-blend-bag.jpg ← Upload
+
+[Generate Video] ← Button
+```
+
+**Behind the scenes on form submission:**
+- Form data validated
+- User's brand profile loaded
+- Cost calculated: $1.60 (2 clips × $0.40 each + $0.80 merging/audio)
+- Workflow triggered in n8n
+
+#### Step 2: AI Agent Processing (N8N Backend)
+
+**Workflow receives trigger and begins processing:**
+
+```
+N8N Workflow: Social Media Ad Generator
+────────────────────────────────────────
+
+[1] Receive Webhook
+    ├─ Form data: Product, message, platform, mood
+    ├─ Brand profile: Logo, colors, tone
+    └─ User preferences: Duration, quality tier
+
+[2] Agent 1: Creative Director
+    ├─ System Prompt (loaded):
+    │   "You are an expert advertising creative director specializing
+    │    in social media content. Create technical specifications for
+    │    video generation that maximize engagement and brand impact..."
+    │
+    ├─ User Prompt (constructed):
+    │   "Create a 15-second Instagram Reel for Bold Brew Coffee's
+    │    Morning Blend. Message: 'Start your day bold. 20% off.'
+    │    Target: Young professionals. Mood: Energetic, urgent.
+    │    Brand colors: #FF6B35, #F7931E. Product image provided."
+    │
+    └─ Processing with GPT-4o:
+        ├─ Analyzes requirements
+        ├─ Determines 2 scenes needed (7-8s each)
+        ├─ Generates image and video prompts
+        └─ Outputs structured JSON
+```
+
+**Agent 1 Output:**
+
+```json
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration": "8 seconds",
+      "image_prompt": "Bold Brew coffee bag on rustic wooden table with 
+                       coffee beans scattered around, dramatic morning 
+                       sunlight from left creating rim light on product, 
+                       steam rising from fresh cup beside it, shallow depth 
+                       of field, warm color grading with #FF6B35 and 
+                       #F7931E accents, high contrast, product photography",
+      "video_prompt": {
+        "scene": "Coffee bag with rising steam and coffee beans",
+        "camera_movement": "Fast dolly-in from medium to close-up, 
+                            slight handheld shake for energy",
+        "motion": "Coffee beans dropping in slow motion, steam rising 
+                   with particle effects, dynamic lighting shifts",
+        "effects": "Motion blur on beans, depth of field, film grain, 
+                    warm color grade, high contrast",
+        "text_overlay": "START YOUR DAY BOLD (0-3s, large animated text)",
+        "mood": "Energetic, urgent, morning freshness"
+      }
+    },
+    {
+      "scene_number": 2,
+      "duration": "7 seconds",
+      "image_prompt": "Close-up of steaming coffee cup being filled, 
+                       Bold Brew logo visible on cup, warm morning light, 
+                       rich brown coffee creating latte art, hands holding 
+                       cup, cozy cafe atmosphere, #FDC830 warm tones",
+      "video_prompt": {
+        "scene": "Coffee being poured into branded cup",
+        "camera_movement": "Slow zoom on pour action, stable shot",
+        "motion": "Coffee stream in slow motion, steam rising, 
+                   latte art forming",
+        "effects": "Slow motion pour, steam particles, warm glow, 
+                    product logo prominent",
+        "text_overlay": "20% OFF - CODE: BOLD20 (0-5s) + 
+                         SHOP NOW ↗ (5-7s, prominent CTA)",
+        "mood": "Satisfying, premium quality, call to action"
+      }
+    }
+  ],
+  
+  "audio": {
+    "music_style": "Upbeat acoustic-electronic blend, 120 BPM, 
+                    energetic morning vibe",
+    "sound_effects": ["Coffee pour", "beans dropping", "cup set down"]
+  },
+  
+  "branding": {
+    "logo_placement": "Bottom right, small, throughout video",
+    "color_palette": ["#FF6B35", "#F7931E", "#FDC830"],
+    "brand_tone": "Friendly, energetic, approachable"
+  },
+  
+  "technical_specs": {
+    "aspect_ratio": "9:16",
+    "video_model": "veo3_fast",
+    "total_duration": "15 seconds",
+    "platform_optimization": "Instagram Reels"
+  },
+  
+  "creative_summary": "High-energy Instagram Reel showcasing Bold Brew's 
+                       Morning Blend with dynamic product shots and urgent 
+                       promotional message. Opens with attention-grabbing 
+                       coffee bean drop, transitions to satisfying pour 
+                       shot with clear CTA. Optimized for sound-off viewing 
+                       with prominent text overlays."
+}
+```
+
+**[3] Human-in-the-Loop (Optional HITL)**
+
+```
+If HITL enabled:
+├─ Send preview to user (Telegram/Web interface):
+│
+│   ╔══════════════════════════════════════╗
+│   ║  Video Preview Plan                  ║
+│   ╠══════════════════════════════════════╣
+│   ║ Scene 1: Coffee product with beans   ║
+│   ║ dropping, dramatic morning light     ║
+│   ║ Text: "START YOUR DAY BOLD"          ║
+│   ║                                       ║
+│   ║ Scene 2: Coffee pour close-up with   ║
+│   ║ branding, steam effects              ║
+│   ║ Text: "20% OFF - CODE: BOLD20"       ║
+│   ║                                       ║
+│   ║ Duration: 15s | Format: 9:16         ║
+│   ║ Model: Veo3 Fast | Cost: ~$1.60     ║
+│   ╚══════════════════════════════════════╝
+│
+│   [✓ Approve & Generate]  [✎ Request Changes]
+│
+├─ User reviews and approves
+└─ Workflow continues
+
+If user requests changes:
+├─ Collect feedback: "Make it more elegant, less energetic"
+├─ Route to Agent 2: Revisor
+├─ Agent 2 adjusts prompts maintaining structure
+└─ Present revised plan for approval
+```
+
+**[4] Proceed to Generation**
+
+```
+User approves → Send status update:
+
+"🎬 Your video is being created...
+ Estimated time: 8-10 minutes
+ You'll be notified when complete."
+```
+
+#### Step 3: Asset Generation (Automated Pipeline)
+
+**Workflow executes generation sequence:**
+
+```
+[5] Scene 1 - Image Generation
+    │
+    ├─ HTTP Request to Key.ai (ChatGPT Image Model)
+    │   POST https://api.key.ai/v1/images/generations
+    │   Headers: Authorization: Bearer {API_KEY}
+    │   Body: {
+    │     "model": "gpt-4o-image",
+    │     "prompt": "{scene_1_image_prompt}",
+    │     "image_url": "{uploaded_product_image}",
+    │     "size": "1080x1920"
+    │   }
+    │
+    ├─ Response: {"task_id": "img_abc123", "status": "processing"}
+    │
+    ├─ [Wait Node] 30 seconds
+    │
+    ├─ GET https://api.key.ai/v1/images/generations/img_abc123
+    │
+    └─ Response: {
+          "status": "success",
+          "image_url": "https://cdn.key.ai/img_abc123.png"
+        }
+
+[6] Scene 1 - Video Generation
+    │
+    ├─ HTTP Request to Key.ai (Veo3)
+    │   POST https://api.key.ai/v1/videos/generations
+    │   Body: {
+    │     "model": "veo3_fast",
+    │     "image_url": "{scene_1_image_url}",
+    │     "prompt": "{scene_1_video_prompt_json}",
+    │     "duration": 8,
+    │     "aspect_ratio": "9:16"
+    │   }
+    │
+    ├─ Response: {"task_id": "vid_xyz789", "status": "queued"}
+    │
+    ├─ [Wait Node] 420 seconds (7 minutes)
+    │
+    ├─ [Loop] Poll every 30s until complete:
+    │   GET https://api.key.ai/v1/videos/generations/vid_xyz789
+    │
+    └─ Response: {
+          "status": "completed",
+          "video_url": "https://cdn.key.ai/vid_xyz789.mp4",
+          "duration": 8.2
+        }
+
+[7] Scene 2 - Image Generation (Parallel)
+    └─ (Same process as Scene 1, running simultaneously)
+
+[8] Scene 2 - Video Generation
+    └─ (Executes after Scene 2 image completes)
+
+[9] Audio Generation
+    │
+    ├─ Background Music Selection
+    │   API call to music library with style: "upbeat acoustic-electronic"
+    │   Returns: music_track_morning_energy.mp3
+    │
+    └─ Sound Effects (optional)
+        Download: coffee_pour.wav, beans_drop.wav
+```
+
+**Timeline visualization:**
+
+```
+Time: 0s ──────────────────────────────────────────────────> 10min
+
+Scene 1: [IMG:30s][───────VID:7min───────]
+                                           └─[Complete]
+Scene 2:         [IMG:30s][───────VID:7min───────]
+                                                   └─[Complete]
+Audio:   [Selection:10s]──────────────────────────[Ready]
+
+Post:                                              [Merge:60s]
+                                                            └─[Final]
+```
+
+#### Step 4: Post-Processing & Assembly
+
+```
+[10] Video Merging (FFmpeg via File.ai)
+     │
+     ├─ Upload clips to File.ai:
+     │   scene_1_vid_xyz789.mp4
+     │   scene_2_vid_abc456.mp4
+     │
+     ├─ FFmpeg Command (automated):
+     │   ffmpeg -i scene1.mp4 -i scene2.mp4 
+     │          -filter_complex "[0:v]fade=t=out:st=7.5:d=0.5[v0];
+     │                           [1:v]fade=t=in:st=0:d=0.5[v1];
+     │                           [v0][v1]concat=n=2:v=1[outv]"
+     │          -map "[outv]" merged_video.mp4
+     │   
+     │   (Adds 0.5s crossfade transition between clips)
+     │
+     └─ Output: merged_video.mp4 (15 seconds total)
+
+[11] Audio Overlay
+     │
+     ├─ Mix background music with video:
+     │   ffmpeg -i merged_video.mp4 -i music_track.mp3 
+     │          -filter_complex "[1:a]volume=0.3[music];
+     │                           [music]afade=t=in:st=0:d=0.5,
+     │                                  afade=t=out:st=14:d=1[audio]"
+     │          -map 0:v -map "[audio]" video_with_audio.mp4
+     │
+     └─ Output: video_with_audio.mp4
+
+[12] Logo Overlay
+     │
+     ├─ Fetch logo from brand profile: bold-brew-logo.png
+     │
+     ├─ Apply overlay (bottom-right, small size):
+     │   ffmpeg -i video_with_audio.mp4 -i logo.png
+     │          -filter_complex "[1:v]scale=120:-1[logo];
+     │                           [0:v][logo]overlay=W-w-20:H-h-20"
+     │          video_with_logo.mp4
+     │
+     └─ Output: video_with_logo.mp4
+
+[13] Text Overlay Addition
+     │
+     ├─ Scene 1 text: "START YOUR DAY BOLD" (0-3s)
+     │   Position: Center, large font, animated entrance
+     │
+     ├─ Scene 2 text: "20% OFF - CODE: BOLD20" (8-13s)
+     │   Position: Upper third, medium font
+     │
+     ├─ Scene 2 CTA: "SHOP NOW ↗" (13-15s)
+     │   Position: Center, large font, button style
+     │
+     ├─ Apply with brand fonts and colors (#FF6B35, #FDC830)
+     │
+     └─ Output: final_video.mp4
+
+[14] Final Rendering
+     │
+     ├─ Optimize for Instagram Reels:
+     │   Resolution: 1080x1920 (9:16)
+     │   Frame rate: 30fps
+     │   Bitrate: 8Mbps
+     │   Format: MP4 (H.264)
+     │
+     └─ Output: BoldBrew_SocialAd_Final.mp4 (15.2s, 18.3MB)
+```
+
+#### Step 5: Delivery & User Notification
+
+```
+[15] Upload to Cloud Storage
+     │
+     ├─ Upload final_video.mp4 to S3/Cloudinary
+     ├─ Generate public download link (expires in 7 days)
+     └─ Store metadata:
+         ├─ user_id, ad_type, duration, cost
+         ├─ generation_time, model_used
+         └─ thumbnail_url
+
+[16] Notify User
+     │
+     ├─ Send notification (Email/Telegram/In-app):
+     │
+     │   ╔════════════════════════════════════════╗
+     │   ║ ✅ Your video is ready!                ║
+     │   ╠════════════════════════════════════════╣
+     │   ║ Bold Brew - Social Media Ad            ║
+     │   ║ Duration: 15 seconds                   ║
+     │   ║ Format: Instagram Reels (9:16)         ║
+     │   ║                                         ║
+     │   ║ [📥 Download Video]                    ║
+     │   ║ [▶ Preview]                            ║
+     │   ║ [🔄 Generate Variation]                ║
+     │   ╚════════════════════════════════════════╝
+     │
+     └─ Log completion in user's project history
+
+[17] User Actions
+     │
+     ├─ Download video → Ready to upload to Instagram
+     ├─ Preview → Plays in browser
+     ├─ Generate Variation → Re-triggers workflow with same inputs
+     └─ Request Changes → Opens feedback form, triggers Agent 2
+```
+
+**Total Time:** ~10 minutes from submission to delivery
+
+**Total Cost:**
+```
+Scene 1 Image: $0.03
+Scene 1 Video (Veo3 Fast): $0.40
+Scene 2 Image: $0.03
+Scene 2 Video (Veo3 Fast): $0.40
+Audio Selection: $0.10
+Merging/Processing: $0.20
+Storage/Bandwidth: $0.05
+────────────────────────────
+Total: $1.21
+```
+
+### 3.4 Solution Architecture Diagram
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                        USER INTERFACE LAYER                           │
+│     (Web Application / Mobile App / Telegram Bot Interface)          │
+│                                                                       │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌──────────────┐  │
+│  │  Ad Type   │  │  Guided    │  │  Progress  │  │   Video      │  │
+│  │  Selection │  │  Input     │  │  Tracking  │  │   Download   │  │
+│  │            │  │  Forms     │  │  & Status  │  │   & Preview  │  │
+│  └────────────┘  └────────────┘  └────────────┘  └──────────────┘  │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                │
+                                │ API Calls / Webhooks
+                                │
+┌───────────────────────────────▼──────────────────────────────────────┐
+│                  AI AGENT ORCHESTRATION LAYER                         │
+│                            (N8N)                                      │
+│                                                                       │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                    Workflow Manager                           │   │
+│  │  ┌────────────┐  ┌────────────┐  ┌──────────────┐           │   │
+│  │  │  Trigger   │  │  Routing   │  │   Error      │           │   │
+│  │  │  Handler   │  │  Logic     │  │   Handling   │           │   │
+│  │  └────────────┘  └────────────┘  └──────────────┘           │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                       │
+│  ┌─────────────────────┐         ┌─────────────────────┐           │
+│  │   Agent 1:          │         │   Agent 2:          │           │
+│  │   Creative Director │────────▶│   Revisor           │           │
+│  │                     │         │   (if feedback)     │           │
+│  │ ┌─────────────────┐ │         │ ┌─────────────────┐ │           │
+│  │ │ System Prompt   │ │         │ │ System Prompt   │ │           │
+│  │ │ User Prompt     │ │         │ │ Feedback Input  │ │           │
+│  │ │ Output Parser   │ │         │ │ Revision Logic  │ │           │
+│  │ └─────────────────┘ │         │ └─────────────────┘ │           │
+│  └─────────────────────┘         └─────────────────────┘           │
+│             │                              │                         │
+│             └──────────────┬───────────────┘                         │
+│                            │                                         │
+│                    ┌───────▼────────┐                               │
+│                    │ HITL (Optional) │                               │
+│                    │ Approval Gate   │                               │
+│                    └───────┬────────┘                               │
+│                            │                                         │
+│  ┌─────────────────────────▼───────────────────────────────────┐   │
+│  │           Asset Generation Coordinator                       │   │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │   │
+│  │  │  Image   │  │  Video   │  │  Audio   │  │  Merge   │   │   │
+│  │  │  Queue   │  │  Queue   │  │  Queue   │  │  Queue   │   │   │
+│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                │
+                                │ API Requests
+                                │
+┌───────────────────────────────▼──────────────────────────────────────┐
+│                  AI MODEL INTEGRATION LAYER                           │
+│                     (via API Aggregators)                             │
+│                                                                       │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐     │
+│  │   Key.ai API    │  │  OpenAI API     │  │ ElevenLabs API  │     │
+│  │                 │  │                 │  │                 │     │
+│  │ ┌─────────────┐ │  │ ┌─────────────┐ │  │ ┌─────────────┐ │     │
+│  │ │   Veo3      │ │  │ │  GPT-4o     │ │  │ │   Voice     │ │     │
+│  │ │   Video     │ │  │ │  Image      │ │  │ │  Generation │ │     │
+│  │ └─────────────┘ │  │ └─────────────┘ │  │ └─────────────┘ │     │
+│  │                 │  │                 │  │                 │     │
+│  │ ┌─────────────┐ │  │ ┌─────────────┐ │  │                 │     │
+│  │ │   Flux      │ │  │ │  GPT-4o     │ │  │                 │     │
+│  │ │  (backup)   │ │  │ │  (Agents)   │ │  │                 │     │
+│  │ └─────────────┘ │  │ └─────────────┘ │  │                 │     │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘     │
+│                                                                       │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐     │
+│  │   File.ai       │  │  HeyGen/D-ID    │  │  Music Library  │     │
+│  │   (FFmpeg)      │  │   (Avatars)     │  │   API           │     │
+│  │                 │  │                 │  │                 │     │
+│  │ ┌─────────────┐ │  │ ┌─────────────┐ │  │ ┌─────────────┐ │     │
+│  │ │  Video      │ │  │ │  Talking    │ │  │ │  Royalty    │ │     │
+│  │ │  Merging    │ │  │ │  Heads      │ │  │ │  Free Music │ │     │
+│  │ └─────────────┘ │  │ └─────────────┘ │  │ └─────────────┘ │     │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘     │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                │
+                                │ Data Access
+                                │
+┌───────────────────────────────▼──────────────────────────────────────┐
+│                        DATA & STORAGE LAYER                           │
+│                                                                       │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │               Brand Assets Database                          │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │    │
+│  │  │  User    │  │  Brand   │  │  Product │  │   Logo    │  │    │
+│  │  │ Profiles │  │  Colors  │  │  Images  │  │   Files   │  │    │
+│  │  └──────────┘  └──────────┘  └──────────┘  └───────────┘  │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                       │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │            Generated Assets Storage                          │    │
+│  │  (Cloud Storage: S3 / Cloudinary / Azure Blob)              │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │    │
+│  │  │  Videos  │  │  Images  │  │  Audio   │  │  Project  │  │    │
+│  │  │ (Output) │  │ (Temp)   │  │  Files   │  │  History  │  │    │
+│  │  └──────────┘  └──────────┘  └──────────┘  └───────────┘  │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                       │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │                Workflow Execution Database                   │    │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │    │
+│  │  │  Task    │  │  Cost    │  │  Error   │  │   User    │  │    │
+│  │  │  Logs    │  │  Tracking│  │  Logs    │  │  Sessions │  │    │
+│  │  └──────────┘  └──────────┘  └──────────┘  └───────────┘  │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+└───────────────────────────────────────────────────────────────────────┘
+
+DATA FLOW:
+═══════════
+User Input → Agent Processing → Asset Generation → Post-Processing → Delivery
+     ↓              ↓                   ↓                 ↓             ↓
+ Validation    Prompt Crafting    API Coordination    Merging      Storage
+     ↓              ↓                   ↓                 ↓             ↓
+Brand Profile  Structured JSON    Wait & Poll      Logo/Text      Download Link
+   Loading     Approval (HITL)    Error Handling   Overlays       Notification
+```
+
+**Key Architecture Principles:**
+
+1. **Separation of Concerns:** Each layer has distinct responsibilities
+2. **Modularity:** Components can be upgraded/replaced independently
+3. **Scalability:** Parallel processing where possible
+4. **Reliability:** Error handling and fallbacks at every layer
+5. **Cost Optimization:** Smart model selection based on requirements
+6. **User Experience:** Complexity hidden behind simple interfaces
+
+---
+
+## 4. ADDRESSING KEY TECHNICAL CHALLENGES
+
+### 4.1 Challenge: Duration Constraints (5-21s AI Video Limits)
+
+**The Technical Problem:**
+
+Current state-of-the-art AI video generation models have strict duration limitations:
+- Veo3: 5-21 seconds per generation
+- Runway Gen-3: 5-10 seconds
+- Kling: Up to 2 minutes (but significant quality/consistency degradation beyond 21s)
+- Luma Dream Machine: 5-10 seconds
+
+However, effective advertising often requires longer formats:
+- Explainer videos: 30-60 seconds to properly explain concepts
+- Testimonials: 20-40 seconds for authentic storytelling
+- Brand narratives: 45-90 seconds for emotional connection
+
+**Our Multi-Clip Solution:**
+
+We overcome this limitation through intelligent scene segmentation, consistency management, and automated stitching.
+
+#### Scene Segmentation Intelligence
+
+**AI-Powered Script Analysis:**
+
+When a user requests a 45-second explainer video, our Agent 1 automatically:
+
+1. **Analyzes Content Requirements**
+   - Breaks down message into logical segments
+   - Identifies natural transition points
+   - Calculates optimal clip duration distribution
+
+2. **Generates Scene Plan**
+```json
+{
+  "total_duration": 45,
+  "clip_count": 5,
+  "clips": [
+    {
+      "clip_id": 1,
+      "duration": 9,
+      "purpose": "Hook and problem introduction",
+      "transition_out": "Product enters from right"
+    },
+    {
+      "clip_id": 2,
+      "duration": 9,
+      "purpose": "Problem amplification with examples",
+      "transition_in": "Product continues from left",
+      "transition_out": "Interface zoom transition"
+    },
+    {
+      "clip_id": 3,
+      "duration": 9,
+      "purpose": "Solution demonstration",
+      "transition_in": "Interface fills screen",
+      "transition_out": "User satisfaction"
+    },
+    {
+      "clip_id": 4,
+      "duration": 9,
+      "purpose": "Key benefits showcase",
+      "transition_in": "Same user context",
+      "transition_out": "Results visualization"
+    },
+    {
+      "clip_id": 5,
+      "duration": 9,
+      "purpose": "Call to action and branding",
+      "transition_in": "Logo reveal",
+      "transition_out": "Fade to brand color"
+    }
+  ]
+}
+```
+
+3. **Optimizes for Flow**
+   - Ensures narrative coherence across clips
+   - Plans visual continuity elements
+   - Designates transition mechanics
+
+#### Consistency Mechanisms
+
+**Visual Continuity Strategies:**
+
+**1. Style Parameter Anchoring**
+```
+All clips share base parameters:
+├─ Color palette: Same hex codes across all prompts
+├─ Lighting direction: Consistent light source position
+├─ Visual style: Same artistic direction keywords
+├─ Camera work: Coherent camera movement logic
+└─ Mood/tone: Uniform emotional atmosphere
+```
+
+**2. Character/Product Consistency**
+
+For clips featuring the same character or product:
+
+```
+Method A: Reference Image (Preferred)
+├─ Generate character in Clip 1
+├─ Extract still frame as reference
+├─ Use reference image for all subsequent clips
+└─ Veo3's "image-to-video" ensures same appearance
+
+Method B: Detailed Description Anchoring
+├─ Highly specific character description in all prompts
+├─ Example: "30-year-old Asian female, shoulder-length black 
+│            hair, wearing white button-up shirt, brown eyes,
+│            professional demeanor, same person as previous scene"
+└─ Less reliable but functional for minor characters
+```
+
+**3. Environmental Consistency**
+
+```
+For scenes in same location:
+├─ Identical environment descriptions across clips
+├─ Fixed camera perspective references
+├─ Consistent props and background elements
+├─ Example: "Same home office, desk on left, window behind,
+│            plant on right corner, neutral walls"
+```
+
+#### Transition Intelligence
+
+**Prompt Engineering for Smooth Transitions:**
+
+Each clip's prompt includes transition cues that create visual flow:
+
+**Example: Clip 1 → Clip 2 Transition**
+
+```
+Clip 1 Video Prompt (final section):
+{
+  "scene": "User frustrated at computer, home office...",
+  "ending_composition": "Camera ends on medium shot, user on left 
+                         side of frame, computer screen on right, 
+                         user's hand reaching toward mouse",
+  "final_frame_notes": "Screen glowing, user's profile lit from right"
+}
+
+Clip 2 Video Prompt (opening section):
+{
+  "scene": "Same home office, now showing computer screen close-up...",
+  "opening_composition": "Camera starts on computer screen from Clip 1
+                          perspective, slight zoom in, user's hand enters
+                          frame from left matching previous position",
+  "continuity_notes": "Same lighting from right, same desk, immediate
+                       continuation of previous action"
+}
+```
+
+**Transition Types We Employ:**
+
+**1. Match Cut Transitions**
+- Action continues across clip boundary
+- Same subject, same position, different angle or zoom level
+
+**2. Visual Flow Transitions**
+- Objects move across frame in direction of transition
+- Example: Product exits right in Clip 1, enters left in Clip 2
+
+**3. Thematic Transitions**
+- Color/mood carries over
+- Visual motif connects scenes
+
+#### Automated Stitching with FFmpeg
+
+**Technical Implementation:**
+
+```bash
+# Crossfade Transition (0.5 second overlap)
+ffmpeg -i clip1.mp4 -i clip2.mp4 -i clip3.mp4 -i clip4.mp4 -i clip5.mp4 \
+  -filter_complex "\
+    [0:v]trim=0:8.5,setpts=PTS-STARTPTS[v0]; \
+    [1:v]trim=0:9,setpts=PTS-STARTPTS[v1]; \
+    [2:v]trim=0:9,setpts=PTS-STARTPTS[v2]; \
+    [3:v]trim=0:9,setpts=PTS-STARTPTS[v3]; \
+    [4:v]trim=0:9,setpts=PTS-STARTPTS[v4]; \
+    \
+    [v0][v1]xfade=transition=fade:duration=0.5:offset=8.5[v01]; \
+    [v01][v2]xfade=transition=fade:duration=0.5:offset=17[v012]; \
+    [v012][v3]xfade=transition=fade:duration=0.5:offset=25.5[v0123]; \
+    [v0123][v4]xfade=transition=fade:duration=0.5:offset=34[outv]" \
+  -map "[outv]" final_45s_video.mp4
+```
+
+**Transition Variations:**
+- Fade: Smooth opacity transition
+- Wipe: Directional wipe effect
+- Slide: One clip slides over another
+- Dissolve: Cross-dissolve effect
+
+Selection based on scene context (Agent determines best fit).
+
+#### Audio Continuity Layer
+
+**Spanning Audio Across Clips:**
+
+```
+Voiceover Strategy:
+├─ Generate complete 45-second voiceover first
+├─ Split timing aligned with clip boundaries
+├─ Lay over final merged video
+└─ Ensures narrative flow despite visual cuts
+
+Background Music:
+├─ Single continuous music track
+├─ Selected based on overall mood
+├─ Volume ducking during important voiceover sections
+└─ Unifies disparate clips into cohesive experience
+```
+
+#### Real-World Example: 45-Second Explainer
+
+**User Request:**
+"Create a 45-second explainer for our productivity app, showing how it solves task management chaos."
+
+**System Breakdown:**
+
+```
+Scene 1 (0-9s): The Problem
+├─ Visual: Desk cluttered with sticky notes, multiple devices
+├─ Action: Person overwhelmed, switching between apps
+├─ Text: "Drowning in tasks?"
+└─ Ends: Hand reaches for phone
+
+Scene 2 (9-18s): Problem Escalation
+├─ Visual: Phone screen with 15+ task apps, notifications everywhere
+├─ Action: Frantic swiping, frustration growing
+├─ Text: "Too many tools, no clarity"
+└─ Ends: Close-up of confused expression
+
+Scene 3 (18-27s): Solution Introduction
+├─ Visual: Clean app interface appears, smooth animation
+├─ Action: Finger tapping to open app, immediate simplicity
+├─ Text: "Meet TaskFlow"
+└─ Ends: Dashboard view fills screen
+
+Scene 4 (27-36s): Solution in Action
+├─ Visual: App features demonstrated, tasks organizing
+├─ Action: Smooth interactions, checkboxes completing
+├─ Text: "All tasks, one place, zero chaos"
+└─ Ends: Satisfied user smile
+
+Scene 5 (36-45s): Call to Action
+├─ Visual: User back at clean desk, organized and calm
+├─ Action: Confident work posture, productivity visualization
+├─ Text: "Start free today - TaskFlow.com"
+└─ Ends: Logo and website fade in
+```
+
+**Consistency Maintained:**
+- Same actor across all clips (via reference image)
+- Same desk/office environment
+- Consistent lighting (natural from window-right)
+- Unified color scheme (blues and whites)
+- Continuous voiceover narrative
+
+**Result:** 45-second video that appears as single production despite being 5 separately generated clips.
+
+**Quality Metrics:**
+- Clip transitions: Smooth, barely noticeable (0.5s crossfades)
+- Character consistency: 90%+ visual similarity
+- Environmental consistency: 95%+ (same location recognition)
+- Narrative flow: Seamless story progression
+- Audio continuity: Professional, unified
+
+### 4.2 Challenge: Prompt Complexity
+
+**The Technical Problem:**
+
+AI video generation models require highly specific, technical prompts to produce quality results. Users without cinematography, lighting, or video production knowledge struggle to communicate their vision effectively.
+
+**Example of the gap:**
+
+```
+What user wants to say:
+"A cool ad for my coffee shop"
+
+What AI models need to hear:
+"Medium close-up shot of artisan coffee cup on rustic wooden surface,
+steam rising with volumetric particle effects visible against
+dramatic side lighting (5600K color temperature), shallow depth of
+field (f/2.8 equivalent) creating bokeh background of cafe ambiance,
+slow controlled dolly-in camera movement from 18 inches to 8 inches
+over 8 seconds, film grain overlay at 15% opacity, warm color grading
+with lifted shadows (gamma 1.2) and orange-teal color palette split
+toning, natural cafe ambient sound with espresso machine subtle in
+background, 24fps for cinematic motion blur"
+```
+
+**Our Abstraction Solution:**
+
+We create an intelligent translation layer that converts business language into technical specifications.
+
+#### Template Library System
+
+**Pre-tested Prompt Structures:**
+
+For each ad type and common scenario, we maintain optimized prompt templates:
+
+**Example: Product Showcase Template**
+
+```python
+TEMPLATE_PRODUCT_SHOWCASE = {
+  "image_prompt_structure": """
+    {product_type} on {surface_type} surface, {lighting_mood} lighting,
+    {camera_angle}, {depth_of_field_style}, {color_mood} color grading,
+    {background_description}, {product_position}, high quality product
+    photography, {brand_colors_if_provided}
+  """,
+  
+  "video_prompt_structure": {
+    "scene": "{product_type} showcase with {mood} presentation",
+    "camera_movement": "{movement_type} from {start_distance} to {end_distance}",
+    "lighting": "{lighting_type}, {light_direction}, {light_quality}",
+    "motion_elements": "{product_specific_motion}, {environmental_effects}",
+    "effects": "{visual_effects_list}",
+    "mood": "{emotional_tone}",
+    "pacing": "{speed} with {rhythm}",
+    "duration": "{seconds}"
+  },
+  
+  "variables": {
+    "lighting_mood": ["dramatic", "soft and natural", "golden hour", "bright and clean"],
+    "camera_angle": ["eye-level product view", "slight overhead", "low angle hero shot"],
+    "movement_type": ["slow dolly-in", "orbital rotation", "reveal pan", "dynamic handheld"],
+    "visual_effects_list": ["depth of field", "motion blur", "film grain", "color grading"]
+  }
+}
+```
+
+**Agent 1 fills in variables based on user input:**
+
+```
+User says: "Energetic coffee ad for Instagram"
+
+Agent processing:
+├─ Product type: Coffee
+├─ Mood: Energetic → lighting_mood = "dramatic", movement_type = "dynamic handheld"
+├─ Platform: Instagram → aspect_ratio = "9:16", duration = "15s", pacing = "fast"
+├─ Infers: morning_context = true → lighting = "golden hour natural"
+└─ Applies brand colors if in profile
+
+Generated technical prompt:
+"Premium coffee bag on rustic wooden surface, dramatic golden hour
+lighting from left creating rim light, dynamic handheld camera with
+slight shake for energy, shallow depth of field creating bokeh cafe
+background, warm color grading with #FF6B35 accent highlights,
+scattered coffee beans, high contrast product photography..."
+```
+
+#### Agent Translation Examples
+
+**Example 1: Simple to Technical**
+
+**User Input:**
+```json
+{
+  "ad_type": "social_media",
+  "product": "Fitness tracker watch",
+  "message": "Track your goals",
+  "mood": "motivational",
+  "platform": "instagram_reels"
+}
+```
+
+**Agent 1 Output:**
+```json
+{
+  "image_prompt": "Modern fitness tracking smartwatch on athletic wrist,
+                   post-workout gym environment with natural window light,
+                   watch screen displaying heart rate and activity rings
+                   clearly visible, shallow depth of field with blurred
+                   gym equipment background, fresh energetic mood, clean
+                   modern aesthetic, high contrast product shot",
+  
+  "video_prompt": {
+    "scene": "Fitness watch on active person's wrist during workout",
+    "camera_movement": "Close-up tracking shot following wrist movement,
+                        dynamic handheld style matching workout energy,
+                        occasional screen close-ups showing data",
+    "motion_elements": "Arm movements during exercise, watch screen
+                        animations, water droplets on watch face, heart
+                        rate pulsing visualization",
+    "lighting": "Natural gym lighting with window backlighting creating
+                 rim light on watch, highlights on screen for readability",
+    "effects": "Motion blur on rapid movements, depth of field focus
+                pulls to watch screen, slight slow-motion on key moments,
+                energetic color grade with vibrant screen colors",
+    "mood": "Motivational, energetic, achievement-focused",
+    "pacing": "Fast with rhythmic cuts matching workout tempo"
+  },
+  
+  "reasoning": "Instagram Reels context requires fast-paced, visually
+                dynamic content. Motivational mood translated to energetic
+                camera work and achievement visualization. Product clarity
+                maintained through strategic focus and screen visibility."
+}
+```
+
+**Example 2: Vague to Specific**
+
+**User Input:**
+```
+"Make it look professional and trustworthy for my legal services"
+```
+
+**Agent 1 Interpretation:**
+```json
+{
+  "interpreted_requirements": {
+    "professional": "Clean, minimalist aesthetic, stable camera work,
+                     neutral colors, no flashy effects",
+    "trustworthy": "Well-lit, clear visibility, authoritative presence,
+                    traditional composition, steady pacing",
+    "legal_services": "Office environment, professional attire, documents
+                       or technology visible, serious tone"
+  },
+  
+  "generated_prompts": {
+    "visual_style": "Corporate professional, clean lines, blue-gray color
+                     palette suggesting trust and stability",
+    "camera_work": "Stable tripod shots, no handheld shake, slow controlled
+                    movements, traditional composition following rule of thirds",
+    "lighting": "Soft three-point lighting, no harsh shadows, even
+                 illumination suggesting transparency",
+    "pacing": "Moderate, deliberate, allowing information absorption",
+    "tone": "Authoritative yet approachable, confident, reassuring"
+  }
+}
+```
+
+#### Feedback Incorporation (Agent 2)
+
+**User provides feedback after initial preview:**
+
+```
+User: "Make it more elegant and less energetic"
+
+Agent 2 Processing:
+├─ Identifies conflicting elements: "energetic" vs "elegant"
+├─ Adjusts parameters:
+│   ├─ Camera movement: "dynamic handheld" → "slow controlled dolly"
+│   ├─ Pacing: "fast" → "moderate with pauses"
+│   ├─ Effects: Remove "motion blur", add "subtle film grain"
+│   ├─ Color: Shift from "high contrast" to "muted elegance"
+│   └─ Music: "upbeat 120 BPM" → "sophisticated 90 BPM"
+└─ Maintains core elements: product, message, platform requirements
+
+Revised Prompt: Now emphasizes elegance while keeping original structure
+```
+
+#### Benefits of This Abstraction:
+
+✅ **No Learning Curve:** Users describe intent in natural language
+✅ **Consistent Quality:** Templates based on proven successful prompts
+✅ **Rapid Iteration:** Feedback quickly adjusts technical parameters
+✅ **Expertise Encoded:** Professional cinematography knowledge built-in
+✅ **Platform Optimization:** Best practices automatically applied
+
+**Comparison:**
+
+```
+Traditional Approach:
+User learns cinematography → Crafts technical prompt → Trial and error
+Time: Hours to days | Success rate: 30-40% | Cost: $10-50 in failed attempts
+
+Our Approach:
+User describes goal → Agent translates → Optimized generation
+Time: 2 minutes | Success rate: 75-85% | Cost: $1-3 per successful video
+```
+
+### 4.3 Challenge: Workflow Fragmentation
+
+**The Technical Problem:**
+
+Creating a complete video ad traditionally requires:
+1. Opening 4-6 different applications
+2. Managing files across platforms
+3. Context switching between different interfaces
+4. Manual data transfer between tools
+5. Inconsistent outputs requiring harmonization
+6. Separate accounts, credits, and billing
+
+**Traditional Multi-Tool Journey:**
+
+```
+Step 1: Image Generation (Midjourney)
+├─ Open Discord
+├─ Navigate to Midjourney server
+├─ Type /imagine prompt
+├─ Wait 60 seconds
+├─ Upscale preferred variation
+├─ Download image
+└─ Time: 5-10 minutes
+
+Step 2: Video Generation (Runway)
+├─ Open Runway web app
+├─ Upload image from Step 1
+├─ Write video prompt
+├─ Select duration and settings
+├─ Generate (wait 5-7 minutes)
+├─ Download video clip
+└─ Time: 10-15 minutes
+
+Step 3: Voiceover (ElevenLabs)
+├─ Open ElevenLabs
+├─ Write script
+├─ Select voice
+├─ Generate audio
+├─ Download MP3
+└─ Time: 5 minutes
+
+Step 4: Music (Epidemic Sound)
+├─ Search for appropriate track
+├─ Preview multiple options
+├─ Download selected track
+└─ Time: 10 minutes
+
+Step 5: Video Editing (Premiere Pro / DaVinci)
+├─ Import all assets
+├─ Sync audio to video
+├─ Add logo overlay
+├─ Add text overlays
+├─ Color correction
+├─ Export with proper settings
+└─ Time: 30-60 minutes
+
+Total: 60-100 minutes of active work
+       5-6 different applications
+       Manual file management throughout
+```
+
+**Our Single-Platform Solution:**
+
+**Unified Workflow Orchestration:**
+
+```
+User Experience:
+├─ Fill one form (5 minutes)
+├─ Click "Generate"
+└─ Receive finished video (10 minutes later)
+
+Behind the Scenes (N8N Orchestration):
+├─ [Node 1] Receive user input
+├─ [Node 2-3] Agent processing
+├─ [Node 4-8] Parallel API calls:
+│   ├─ Image generation
+│   ├─ Voice generation
+│   └─ Music selection
+├─ [Node 9-12] Sequential video generation
+├─ [Node 13-15] Merging and post-processing
+└─ [Node 16] Delivery to user
+
+All automated, zero manual intervention required
+```
+
+**N8N Workflow Architecture:**
+
+```
+[Webhook Trigger] → Receives form submission
+        ↓
+[Set Variables] → Extracts and structures data
+        ↓
+[Load Brand Profile] → Fetches user's brand assets
+        ↓
+[AI Agent: Creative Director] → Generates technical prompts
+        ↓
+[IF Node: HITL Enabled?]
+    ├─ YES → [Telegram: Send Preview] → [Wait for Approval] → [IF Approved?]
+    │                                         ├─ NO → [AI Agent: Revisor] → Loop back
+    │                                         └─ YES → Continue
+    └─ NO → Continue directly
+        ↓
+[Telegram: Status Update] → "Generating your video..."
+        ↓
+┌───────────────────────────────────────────────────────┐
+│             PARALLEL EXECUTION BRANCH                  │
+├───────────────────────────────────────────────────────┤
+│  [Branch A: Images]          [Branch B: Audio]        │
+│  ├─ HTTP: Generate Image 1   ├─ HTTP: Generate VO     │
+│  ├─ Wait: 30s                ├─ Wait: 15s             │
+│  ├─ HTTP: Get Image 1        ├─ HTTP: Get VO          │
+│  ├─ HTTP: Generate Image 2   └─ HTTP: Select Music    │
+│  ├─ Wait: 30s                                         │
+│  └─ HTTP: Get Image 2                                 │
+└───────────────────────────────────────────────────────┘
+        ↓
+[Merge Branches] → All assets ready
+        ↓
+[HTTP: Generate Video Clip 1] → Using Image 1
+        ↓
+[Wait: 420s] → Poll until complete
+        ↓
+[HTTP: Get Video Clip 1]
+        ↓
+[HTTP: Generate Video Clip 2] → Using Image 2
+        ↓
+[Wait: 420s] → Poll until complete
+        ↓
+[HTTP: Get Video Clip 2]
+        ↓
+[HTTP: FFmpeg Merge] → Stitch clips with transitions
+        ↓
+[Wait: 60s] → Processing
+        ↓
+[HTTP: Add Audio Layer] → Voiceover + Music
+        ↓
+[HTTP: Add Logo Overlay] → Brand logo from profile
+        ↓
+[HTTP: Add Text Overlays] → Animated text elements
+        ↓
+[Upload to Cloud Storage] → S3/Cloudinary
+        ↓
+[Generate Download Link]
+        ↓
+[Telegram: Send Final Video] → Notification with link
+        ↓
+[Log to Database] → Record metadata, cost, time
+        ↓
+[End]
+```
+
+**Error Handling & Retries:**
+
+```
+Every API call node includes:
+├─ Try-Catch error handling
+├─ Retry logic (3 attempts with exponential backoff)
+├─ Fallback to alternative models if primary fails
+└─ User notification if all attempts fail
+
+Example:
+[HTTP: Veo3 Generation]
+├─ Attempt 1 fails (timeout)
+├─ Wait 5 seconds
+├─ Attempt 2 fails (API rate limit)
+├─ Wait 15 seconds
+├─ Attempt 3 succeeds
+└─ Continue workflow
+
+If all 3 fail:
+└─ [Switch Node] → Try Kling model instead
+```
+
+**State Management:**
+
+```
+Throughout workflow:
+├─ All data stored in workflow variables
+├─ Accessible by any subsequent node
+├─ No manual file transfers
+└─ Complete execution history logged
+
+Variables maintained:
+{
+  "user_id": "usr_123",
+  "project_id": "proj_456",
+  "brand_profile": {...},
+  "scene_1_image_url": "https://cdn.key.ai/img_abc.png",
+  "scene_1_video_url": "https://cdn.key.ai/vid_xyz.mp4",
+  "scene_2_image_url": "https://cdn.key.ai/img_def.png",
+  "scene_2_video_url": "https://cdn.key.ai/vid_uvw.mp4",
+  "voiceover_url": "https://cdn.elevenlabs.io/vo_123.mp3",
+  "music_url": "https://cdn.epidemic.com/track_456.mp3",
+  "final_video_url": "https://storage.s3.com/final_789.mp4",
+  "total_cost": 1.85,
+  "generation_time": "9m 32s"
+}
+```
+
+**Cost Optimization Logic:**
+
+```
+[Decision Node: Quality Tier Selection]
+├─ IF user selected "Fast" → Use veo3_fast ($0.40/clip)
+├─ IF user selected "Quality" → Use veo3_quality ($2.80/clip)
+└─ IF user profile has "premium" flag → Always use Quality
+
+[Decision Node: Model Selection]
+├─ Check Key.ai API status
+├─ IF Veo3 available → Use (preferred)
+├─ IF Veo3 down → Fallback to Kling
+└─ IF both down → Notify user, pause workflow
+
+[Parallel Execution Optimization]
+├─ Generate multiple clips simultaneously (where GPU allows)
+├─ Don't wait sequentially (saves 5-10 minutes)
+└─ But limit to 2-3 parallel to avoid rate limits
+```
+
+**Benefits Over Fragmented Workflow:**
+
+| Aspect | Traditional Multi-Tool | Our Platform |
+|--------|----------------------|--------------|
+| Applications needed | 5-6 | 1 |
+| Active user time | 30-60 minutes | 5 minutes |
+| Context switches | 15-20 | 0 |
+| File management | Manual downloads/uploads | Automatic |
+| Error recovery | Manual retry | Automatic |
+| Cost tracking | Across 5 platforms | Single dashboard |
+| Learning curve | 5-6 tools to master | One interface |
+| Output consistency | Manual harmonization | Automated |
+
+### 4.4 Challenge: Brand Consistency
+
+**The Technical Problem:**
+
+Each AI generation is independent with no memory of previous outputs or brand guidelines. Without intervention, generating 10 ads results in 10 different visual styles, potentially damaging brand identity.
+
+**Traditional Manual Approach:**
+
+```
+For each video:
+├─ Remember brand hex codes, type them in prompt
+├─ Download logo, upload to editing software
+├─ Manually position logo in each video
+├─ Adjust colors in post-production to match brand
+├─ Ensure voice matches previous videos (hard to replicate)
+└─ Review for brand guideline compliance
+
+Problems:
+├─ Human error: Forget details, inconsistent application
+├─ Time-consuming: Repeat process for every video
+├─ Drift: Gradual inconsistency across campaign
+└─ Scalability: Unmanageable for high-volume content
+```
+
+**Our Automated Brand System:**
+
+**1. Brand Profile Data Structure:**
+
+```json
+{
+  "user_id": "usr_12345",
+  "company_name": "Bold Brew Coffee Co.",
+  "industry": "Food & Beverage - Coffee",
+  
+  "visual_identity": {
+    "logo": {
+      "primary_url": "https://storage/brands/boldbrew/logo_primary.png",
+      "white_version_url": "https://storage/brands/boldbrew/logo_white.png",
+      "placement_default": "bottom-right",
+      "size_default": "10% of frame width",
+      "padding": "20px from edges",
+      "opacity": 0.9
+    },
+    
+    "colors": {
+      "primary": "#FF6B35",       // Vibrant orange
+      "secondary": "#F7931E",     // Golden orange
+      "accent": "#FDC830",        // Warm yellow
+      "neutral_dark": "#2C3E50",  // Deep blue-gray
+      "neutral_light": "#ECF0F1",  // Light gray
+      "application": "Primary for main elements, secondary for highlights,
+                      accent for CTAs, neutrals for text/backgrounds"
+    },
+    
+    "typography": {
+      "primary_font": "Montserrat",
+      "secondary_font": "Open Sans",
+      "heading_style": "Bold, uppercase for impact",
+      "body_style": "Regular, sentence case for readability",
+      "size_hierarchy": "Headings 2x body size minimum"
+    },
+    
+    "visual_style": {
+      "keywords": ["modern", "bold", "energetic", "artisan", "warm"],
+      "mood": "Friendly yet confident, approachable premium quality",
+      "avoid": ["overly corporate", "cold colors", "static compositions"]
+    }
+  },
+  
+  "brand_voice": {
+    "tone": "Friendly, enthusiastic, motivational",
+    "personality": ["Bold", "Authentic", "Energetic", "Artisan"],
+    "language_style": "Conversational but confident, use active voice",
+    "keywords_to_use": ["bold", "artisan", "craft", "ritual", "morning", "fuel"],
+    "keywords_to_avoid": ["cheap", "instant", "basic", "ordinary"]
+  },
+  
+  "audio_preferences": {
+    "voiceover": {
+      "gender": "Female",
+      "age_range": "25-35",
+      "accent": "American - General",
+      "pace": "Moderate with energy",
+      "tone": "Warm, friendly, motivational",
+      "elevenlabs_voice_id": "voice_abc123xyz"
+    },
+    "music_style": {
+      "genres": ["Acoustic", "Indie Pop", "Upbeat Instrumental"],
+      "tempo": "Moderate to fast (100-130 BPM)",
+      "mood": "Energetic, positive, morning-appropriate",
+      "avoid": ["Heavy electronic", "Classical", "Aggressive"]
+    }
+  },
+  
+  "product_library": [
+    {
+      "product_id": "prod_001",
+      "name": "Morning Blend",
+      "description": "Medium roast artisan coffee blend, balanced and smooth",
+      "images": [
+        "https://storage/brands/boldbrew/products/morning-blend-front.jpg",
+        "https://storage/brands/boldbrew/products/morning-blend-pouring.jpg"
+      ],
+      "key_attributes": ["smooth", "balanced", "morning ritual"]
+    },
+    {
+      "product_id": "prod_002",
+      "name": "Dark Roast Bold",
+      "description": "Intense dark roast for bold flavor seekers",
+      "images": [
+        "https://storage/brands/boldbrew/products/dark-roast-front.jpg"
+      ],
+      "key_attributes": ["intense", "rich", "bold flavor"]
+    }
+  ],
+  
+  "campaign_preferences": {
+    "primary_platforms": ["Instagram", "Facebook", "TikTok"],
+    "target_audience": "Young professionals, 25-40, coffee enthusiasts",
+    "core_message": "Start your day bold with artisan quality",
+    "typical_ctas": ["Shop Now", "Try Bold Brew", "Order Today", "Visit BoldBrew.com"]
+  }
+}
+```
+
+**2. Automatic Application in Workflows:**
+
+**During Prompt Generation (Agent 1):**
+
+```python
+# Pseudocode showing brand injection
+
+def generate_video_prompt(user_input, brand_profile):
+    base_prompt = create_base_prompt(user_input)
+    
+    # Inject brand colors
+    color_instruction = f"Color palette featuring {brand_profile.colors.primary}, \
+                          {brand_profile.colors.secondary}, and {brand_profile.colors.accent}"
+    
+    # Inject visual style
+    style_instruction = f"Visual style: {', '.join(brand_profile.visual_style.keywords)}, \
+                          {brand_profile.visual_style.mood}"
+    
+    # Inject brand voice for any text overlays
+    voice_instruction = f"Tone: {brand_profile.brand_voice.tone}, \
+                          using language style: {brand_profile.brand_voice.language_style}"
+    
+    # Combine all
+    final_prompt = f"{base_prompt}\n{color_instruction}\n{style_instruction}\n{voice_instruction}"
+    
+    return final_prompt
+
+# Result ensures every generation includes brand DNA
+```
+
+**Generated Prompt Example:**
+
+```
+"Medium shot of Bold Brew Morning Blend coffee bag on rustic wooden table,
+morning sunlight creating warm atmosphere, coffee beans scattered artfully,
+steam rising from fresh cup beside product
+
+COLOR PALETTE: Featuring vibrant orange #FF6B35 as primary accent, golden
+orange #F7931E for highlights, warm yellow #FDC830 for call-to-action elements
+
+VISUAL STYLE: Modern, bold, energetic, artisan, warm aesthetic. Friendly yet
+confident mood, approachable premium quality presentation
+
+TONE: Friendly, enthusiastic, motivational language. Active voice with
+conversational but confident delivery
+
+Camera: Dynamic dolly-in with energetic handheld feel, maintaining artisan
+authenticity through natural lighting and organic composition"
+```
+
+**During Post-Processing:**
+
+```
+[Logo Overlay Node]
+├─ Fetch logo_primary_url from brand profile
+├─ Apply at position: brand_profile.logo.placement_default (bottom-right)
+├─ Size: 10% of frame width
+├─ Padding: 20px from edges
+├─ Opacity: 0.9
+├─ Duration: Throughout video
+└─ Automatic contrast adjustment if logo not visible against background
+
+[Text Overlay Node]
+├─ Font: brand_profile.typography.primary_font (Montserrat)
+├─ Style: Bold, uppercase (per brand guidelines)
+├─ Color: brand_profile.colors.primary (#FF6B35) for main text
+├─ Accent color: brand_profile.colors.accent (#FDC830) for CTA
+└─ Animation: Energetic entrance matching brand personality
+
+[Voiceover Node]
+├─ Voice ID: brand_profile.audio.voice_elevenlabs_voice_id
+├─ Ensures same voice across all videos automatically
+└─ No need to remember or specify each time
+
+[Color Grading Node] (Optional enhancement)
+├─ Apply brand color filter
+├─ Boost brand colors in final output
+└─ Ensure visual harmony with brand palette
+```
+
+**3. Product Consistency:**
+
+```
+When user selects "Morning Blend" product:
+
+[Product Image Injection]
+├─ Retrieve product_library[prod_001].images
+├─ Use as reference images in generation prompts
+├─ Ensures product appears consistently across all ads
+
+Agent prompt automatically includes:
+"Product reference: Bold Brew Morning Blend coffee bag, as shown in
+reference images. Maintain exact product appearance: medium roast bag
+with bold orange branding, specific label design, consistent packaging
+across all scenes."
+```
+
+**4. Cross-Video Consistency Tracking:**
+
+```
+Database stores each generation's parameters:
+
+Video 1:
+├─ Colors used: #FF6B35 (primary), #F7931E (secondary)
+├─ Voice: voice_abc123xyz
+├─ Visual style: Modern, energetic
+├─ Logo placement: Bottom-right
+└─ Font: Montserrat Bold
+
+Video 2:
+├─ AUTOMATICALLY matches Video 1 parameters via brand profile
+└─ No manual specification needed
+
+Video 10:
+├─ Still using same parameters
+└─ Brand consistency maintained at scale
+```
+
+**5. Benefits Demonstrate :**
+
+**Without Brand System (Manual):**
+```
+Video 1: Uses #FF6B35
+Video 2: User forgets exact code, uses #FF7043 (slightly different)
+Video 3: Logo sized at 12% of frame
+Video 4: Logo sized at 8% of frame (inconsistent)
+Video 5: Different voice actor
+Video 6: Font switched to Arial (forgot Montserrat)
+
+Result: Unprofessional, fragmented brand identity
+```
+
+**With Brand System (Automated):**
+```
+Videos 1-10: All use exact #FF6B35
+Videos 1-10: All use identical logo placement and size
+Videos 1-10: All use same voice (voice_abc123xyz)
+Videos 1-10: All use Montserrat Bold
+
+Result: Cohesive, professional brand campaign
+```
+
+**Scalability Impact:**
+
+```
+Creating 50 ads across a campaign:
+
+Manual approach:
+├─ 50 × 10 minutes brand specification = 500 minutes (8.3 hours)
+├─ High error rate (estimated 20% inconsistency)
+└─ Requires brand guideline document reference each time
+
+Automated approach:
+├─ Brand profile setup: 20 minutes (one-time)
+├─ Per-video brand application: 0 minutes (automatic)
+├─ Zero inconsistency errors
+└─ Total time saved: 8+ hours
+```
+
+---
+
+## 5. FOUR SPECIALIZED WORKFLOWS
+
+Our platform provides four distinct, optimized workflows for different advertising needs. Each workflow is specifically designed with format-appropriate components, timing, and best practices.
+
+### 5.1 Explainer Videos (30-60 seconds)
+
+**Purpose:** Educate audience about a product, service, or concept through clear, structured narrative.
+
+**Ideal Use Cases:**
+- SaaS product demonstrations
+- Service explanations ("How it works")
+- Complex concept simplification
+- Feature showcases
+- Process explanations
+
+**Key Components:**
+
+1. **Voiceover Narration** (Primary driver)
+   - AI-generated from script or user-provided
+   - Paces the entire video
+   - Provides educational clarity
+
+2. **B-roll Footage** (Visual support)
+   - Illustrates concepts being explained
+   - Product demonstrations
+   - User interface walkthroughs
+   - Metaphorical visuals
+
+3. **Text Overlays** (Reinforcement)
+   - Key points highlighted
+   - Statistics or data
+   - Step numbers ("Step 1:", "Step 2:")
+   - Important terms defined
+
+4. **Progression Structure** (Narrative flow)
+   - Clear beginning, middle, end
+   - Logical step-by-step presentation
+   - Problem → Solution framework
+
+**User Input Requirements:**
+
+```
+Required Inputs:
+├─ Product/Service Name: "TaskFlow Productivity App"
+├─ Main Problem Solved: "Task management chaos across multiple tools"
+├─ Key Features/Benefits (3-5):
+│   ├─ "Unified dashboard for all tasks"
+│   ├─ "Smart prioritization"
+│   ├─ "Team collaboration built-in"
+│   └─ "Works across all devices"
+├─ Target Audience: "Busy professionals, small team leaders"
+└─ Call to Action: "Start free trial at TaskFlow.com"
+
+Optional Inputs:
+├─ Script Outline (or let AI generate):
+│   "Intro hook → Problem → Solution intro → Feature 1 → Feature 2 → 
+│    Feature 3 → Results → CTA"
+├─ Visual Style: [Clean & Modern / Playful / Corporate / Minimalist]
+├─ Voiceover Preference:
+│   ├─ Gender: Male/Female/Neutral
+│   ├─ Accent: American/British/Australian/etc.
+│   └─ Pace: Fast/Moderate/Slow
+├─ Specific Scenes to Include: "Show mobile app interface, team using it"
+└─ Duration Preference: 30s / 45s / 60s
+```
+
+**Workflow Steps:**
+
+```
+STEP 1: Script Generation & Breakdown
+├─ AI generates complete script based on inputs
+├─ Example 45-second script:
+│   
+│   [0-7s] HOOK & PROBLEM
+│   "Drowning in tasks? Juggling five different apps just to stay organized?
+│    There's a better way."
+│   
+│   [7-15s] PROBLEM AMPLIFICATION
+│   "Task management shouldn't be another task. But with scattered tools,
+│    missed deadlines, and team confusion, that's exactly what it becomes."
+│   
+│   [15-25s] SOLUTION INTRODUCTION
+│   "Meet TaskFlow. One dashboard. All your tasks. Finally organized.
+│    Smart prioritization shows you what matters most."
+│   
+│   [25-37s] KEY BENEFITS
+│   "Collaborate with your team in real-time. Access everything from any
+│    device. And get back hours every week."
+│   
+│   [37-45s] CALL TO ACTION
+│   "Ready to take control? Start your free trial today at TaskFlow.com.
+│    No credit card required."
+│
+├─ Break script into 5 scenes (9 seconds each)
+└─ User approves or requests revision
+
+STEP 2: Voiceover Generation
+├─ Send script to ElevenLabs API
+├─ Use brand voice profile (if exists) or user selection
+├─ Generate complete 45-second voiceover
+├─ Save with timestamp markers for scene alignment
+└─ Output: voiceover_complete.mp3
+
+STEP 3: Scene-by-Scene Visual Generation
+
+Scene 1 (0-9s): Hook & Problem
+├─ Image Prompt: "Overwhelmed professional at cluttered desk, multiple
+│                 devices with different apps open, sticky notes everywhere,
+│                 frustrated expression, natural office lighting"
+├─ Video Prompt: "Person switching between apps frantically, notifications
+│                  popping up, growing frustration, dynamic handheld camera"
+├─ Text Overlay: "DROWNING IN TASKS?" (0-3s, large animated)
+└─ Generate → clip_1.mp4
+
+Scene 2 (9-18s): Problem Amplification
+├─ Image Prompt: "Close-up of phone screen showing 10+ task management apps,
+│                 notification badges with high numbers, chaotic interface"
+├─ Video Prompt: "Screen recording style, rapid swiping between apps,
+│                  notifications multiplying, overwhelm visualization"
+├─ Text Overlay: "5 APPS. ZERO CLARITY." (10-13s)
+└─ Generate → clip_2.mp4
+
+Scene 3 (18-27s): Solution Introduction
+├─ Image Prompt: "Clean TaskFlow dashboard interface on laptop screen,
+│                 organized task lists, intuitive design, calm workspace"
+├─ Video Prompt: "Smooth transition from chaos to order, TaskFlow interface
+│                  animating in, clean interactions, satisfying organization"
+├─ Text Overlay: "MEET TASKFLOW" (19-22s, bold reveal)
+│                "One Dashboard. All Tasks." (23-26s)
+└─ Generate → clip_3.mp4
+
+Scene 4 (27-36s): Key Benefits
+├─ Image Prompt: "Split screen showing TaskFlow on desktop, tablet, phone,
+│                 team members collaborating, synchronized across devices"
+├─ Video Prompt: "Device synchronization visualization, team avatars appearing,
+│                  tasks being checked off across devices simultaneously"
+├─ Text Overlays:
+│   ├─ "✓ Team Collaboration" (28-30s)
+│   ├─ "✓ All Devices" (31-33s)
+│   └─ "✓ Save Hours Weekly" (34-36s)
+└─ Generate → clip_4.mp4
+
+Scene 5 (36-45s): Call to Action
+├─ Image Prompt: "Satisfied professional with completed tasks, clean
+│                 organized workspace, confident smile, TaskFlow logo visible"
+├─ Video Prompt: "User closing laptop confidently, workspace organized,
+│                  TaskFlow logo and website appearing prominently"
+├─ Text Overlay: "START FREE TRIAL" (37-42s, prominent CTA button)
+│                "TaskFlow.com" (40-45s, website display)
+└─ Generate → clip_5.mp4
+
+STEP 4: Post-Production Assembly
+├─ Merge all clips with 0.5s crossfade transitions
+├─ Lay voiceover audio across entire video
+├─ Add background music (subtle, non-intrusive, 60% volume vs voiceover)
+├─ Sync text overlays to voiceover timing
+├─ Add logo overlay (bottom-right, throughout)
+├─ Color grade for consistency
+└─ Final render: TaskFlow_Explainer_45s.mp4
+
+STEP 5: Delivery
+├─ Upload to cloud storage
+├─ Generate download link
+├─ Send preview to user
+└─ Provide transcript and scene breakdown
+```
+
+**Technical Considerations:**
+
+**Pacing & Timing:**
+- Voiceover drives timing (primary consideration)
+- Allow 2-3 second pauses between major points
+- Text overlays visible minimum 2.5 seconds
+- Scene changes align with narrative shifts
+
+**Visual Hierarchy:**
+- Most important information in center third of frame
+- Text legible at mobile sizes (test at 1080x1920)
+- Voiceover and text should reinforce, not duplicate exactly
+
+**Consistency Across Clips:**
+- Same UI design elements in all product shots
+- Consistent character (if showing users) via reference images
+- Unified color scheme throughout
+- Lighting and environment continuity
+
+**Example Generated Explainer Video Quality:**
+
+```
+Input: TaskFlow productivity app explainer
+Duration: 45 seconds
+Clips: 5 (9 seconds each)
+Voiceover: Professional female voice, moderate pace
+Music: Subtle upbeat instrumental background
+Text: Montserrat Bold, brand colors
+Logo: Bottom-right throughout
+
+Output Quality Metrics:
+├─ Narrative clarity: 9/10 (clear problem→solution flow)
+├─ Visual consistency: 8/10 (minor variations in UI appearance)
+├─ Audio quality: 9/10 (professional voiceover, balanced mix)
+├─ Text readability: 10/10 (large, high contrast, appropriate timing)
+└─ Overall: 70-75% professional quality benchmark ✓
+
+Estimated Generation Cost: $2.80
+├─ Images (5 × $0.03): $0.15
+├─ Videos (5 × $0.40 fast): $2.00
+├─ Voiceover: $0.25
+├─ Music: $0.10
+├─ Processing: $0.30
+```
+
